@@ -1,9 +1,9 @@
 {
   "world": {
     "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
-    "address": "0x21b99ae1a15b1f6c4f5e72d2cf7295ab1effa44172321600c6ac4554ce02c88",
-    "seed": "stark_runner",
-    "name": "Stark_Hunter",
+    "address": "0x57bec37a60c0a0f246d0c4f30b7f8202a46d921b056b5a712774177990e18c1",
+    "seed": "stark_explorer",
+    "name": "Stark_Explorer",
     "entrypoints": [
       "uuid",
       "set_metadata",
@@ -1479,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x5f005ab9b6e12a427860663a995feb5784a4d7c4d8c132827807e3d08c3bb8a",
-      "class_hash": "0x56790192c63354db55e6c6b1df20dd1864a6153af3ccdaf696c0b922f569ae5",
+      "address": "0x71ace9144b9e216630f6793089f88f79959e6b1a6a91f974ea32b6d4dd6a8eb",
+      "class_hash": "0x59ca14d8e9a34267d3ed5f8cefbe44d1591a9aa67c3841c8b678b38fe284049",
       "abi": [
         {
           "type": "impl",
@@ -1535,11 +1535,11 @@
         {
           "type": "impl",
           "name": "ActionsImpl",
-          "interface_name": "dojo_intro::systems::actions::IActions"
+          "interface_name": "dojo_stark_explorer::systems::actions::IActions"
         },
         {
           "type": "enum",
-          "name": "dojo_intro::models::Direction",
+          "name": "dojo_stark_explorer::models::Direction",
           "variants": [
             {
               "name": "Middle",
@@ -1565,12 +1565,17 @@
         },
         {
           "type": "interface",
-          "name": "dojo_intro::systems::actions::IActions",
+          "name": "dojo_stark_explorer::systems::actions::IActions",
           "items": [
             {
               "type": "function",
               "name": "spawn",
-              "inputs": [],
+              "inputs": [
+                {
+                  "name": "new_score",
+                  "type": "core::integer::u64"
+                }
+              ],
               "outputs": [],
               "state_mutability": "external"
             },
@@ -1580,16 +1585,9 @@
               "inputs": [
                 {
                   "name": "direction",
-                  "type": "dojo_intro::models::Direction"
+                  "type": "dojo_stark_explorer::models::Direction"
                 }
               ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "collect_coins",
-              "inputs": [],
               "outputs": [],
               "state_mutability": "external"
             }
@@ -1694,7 +1692,7 @@
         },
         {
           "type": "event",
-          "name": "dojo_intro::systems::actions::actions::Event",
+          "name": "dojo_stark_explorer::systems::actions::actions::Event",
           "kind": "enum",
           "variants": [
             {
@@ -1711,12 +1709,11 @@
         }
       ],
       "init_calldata": [],
-      "tag": "Stark_Hunter_Game-actions",
-      "selector": "0x41f0c912bdfe9ee6ae9c35d00c93d3750169a46dfb660d0104705b3ea54c6b3",
+      "tag": "Stark_Explorer_Game-actions",
+      "selector": "0x8292d2b4cd0a7a8580e178289da759e637e3975ba8663b99a6a5e58d88c46d",
       "systems": [
         "spawn",
         "move",
-        "collect_coins",
         "upgrade"
       ]
     }
@@ -1725,17 +1722,36 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x156cd085e9d03742883acaf7f52715ca07c1e0e792adf0e6dd4ba67af6a144e",
-      "tag": "Stark_Hunter_Game-Coins",
-      "selector": "0x4fa2509a152c00442e371066a7d56b46702d8c92270a40663031e3c4a5ce9c1"
+      "class_hash": "0x7cb599c385f3204ffa0461790f94ed24931d57b8093f197c44587e6e91d1675",
+      "tag": "Stark_Explorer_Game-Position",
+      "selector": "0x3d0b4bd18102699be437b361c6814ea9c1dbb22e15ffe1c896222a29c45a0c0"
     },
     {
       "members": [],
-      "class_hash": "0x750124b90e0d6e4eec1aeb0a0bc233d0d8769502a6c5d67502f2dfc2f4d82a4",
-      "tag": "Stark_Hunter_Game-Position",
-      "selector": "0x7c26b6d78958b75fbfe2eb71b48efc5af4cee217a80b1be0965eb4179933b0d"
+      "class_hash": "0x441ede5070f739c464392d01f013373752857f55c542926f138499b0ecf5247",
+      "tag": "Stark_Explorer_Game-VoyageScore",
+      "selector": "0x312822bebd0bef1fefbee2e15b0760201a7eaf9ebaf2bfbd95bb0592f667af6"
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "members": [],
+      "class_hash": "0x2c2af25f8ef57748f38ced14fd5bcca1ab865f9e76f32c28894dbe5f3d27d95",
+      "tag": "Stark_Explorer_Game-HighScoreUpdated",
+      "selector": "0x53cf02f87a2683b90431a03fb8e2daaf53d84275d9bd5782d1b801a97b13672"
+    },
+    {
+      "members": [],
+      "class_hash": "0x245700612801ce362968a7cf30199d2f6fdd4cea4fa0872597d63dc11758899",
+      "tag": "Stark_Explorer_Game-Moved",
+      "selector": "0x4d2350a80d4772947a07692023dc351fb4111e034572426ca7f9ee105ba3491"
+    },
+    {
+      "members": [],
+      "class_hash": "0x2150f059652bd9271c3bc0d7c7dcb1c760b9aa961fa3588654937f19465d283",
+      "tag": "Stark_Explorer_Game-Spawned",
+      "selector": "0x27fae97e0578e794d6c1a2219943988754509f6878c8e4b12fe3d5b005bfc44"
+    }
+  ],
   "external_contracts": []
 }

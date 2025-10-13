@@ -26,7 +26,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "dojo_intro"
+name = "dojo_stark_explorer"
 version = "1.7.0"
 dependencies = [
  "dojo",

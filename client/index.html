@@ -7,16 +7,16 @@
   </head>
 
   <body>
-    <h1>Stark Hunter</h1>
+    <h1>Stark Explorer</h1>
 
     <button id="controller-button">Connect</button>
 
     <div>
       <div id="position-display" class="display">Position: (0, 0)</div>
-      <div id="coins-display" class="display">Coins: 0</div>
+      <div id="score-display" class="display">High Score: 0</div>
 
       <button id="spawn-button" disabled>Spawn</button>
-      <button id="collect-coins-button" disabled>Coin</button>
+      <button id="score-button" disabled>Score</button>
       <!-- <button id="reset-jump-slide-button" disabled>Return to Ground</button> -->
       <div>
         <button id="up-button" disabled>Up</button>
@@ -40,7 +40,7 @@
       import manifest from '../contracts/manifest_dev.json' assert { type: 'json' };
 
       const DOMAIN_SEPERATOR = {
-        name: 'Stark_Hunter',
+        name: 'Stark_Explorer',
         version: '1.0',
         chainId: 'KATANA',
         revision: '1',
@@ -60,7 +60,7 @@
         // Subscribe to model updates
         const [_, subscription] = await torii.subscribeEntityQuery({
           query: new ToriiQueryBuilder().withClause(
-            KeysClause(['Stark_Hunter_Game-Position', 'Stark_Hunter_Game-Coins'], [account.address], 'FixedLen').build(),
+            KeysClause(['Stark_Explorer_Game-Position', 'Stark_Explorer_Game-VoyageScore'], [account.address], 'FixedLen').build(),
           ),
           callback: ({ data, error }) => {
             if (data) {

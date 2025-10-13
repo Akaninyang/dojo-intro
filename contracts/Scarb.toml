@@ -1,6 +1,6 @@
 [package]
 cairo-version = "2.12.2"
-name = "dojo_intro"
+name = "dojo_stark_explorer"
 version = "1.7.0"
 edition = "2024_07"
 

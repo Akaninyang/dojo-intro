@@ -7,11 +7,11 @@
 
 // import { loadEnv } from "vite";
 
-const NAMESPACE = 'Stark_Hunter_Game';
+const NAMESPACE = 'Stark_Explorer_Game';
 const POSITION_MODEL = 'Position';
-const COINS_MODEL = 'Coins';
+const SCORE_MODEL = 'VoyageScore';
 
-const ACTIONS_CONTRACT = 'Stark_Hunter_Game-actions';
+const ACTIONS_CONTRACT = 'Stark_Explorer_Game-actions';
 
 function updateFromEntitiesData(entities) {
   entities.forEach((entity) => {
@@ -26,9 +26,9 @@ function updateFromEntityData(entity) {
       updatePositionDisplay(position.x, position.z);
     }
 
-    if (entity.models[NAMESPACE][COINS_MODEL]) {
-      const coins = entity.models[NAMESPACE][COINS_MODEL];
-      updateCoinsDisplay(coins.coin_count);
+    if (entity.models[NAMESPACE][SCORE_MODEL]) {
+      const voyageScore = entity.models[NAMESPACE][SCORE_MODEL];
+      updateHighScoreDisplay(voyageScore.high_score);
     }
   }
 }
@@ -40,10 +40,10 @@ function updatePositionDisplay(x, z) {
   }
 }
 
-function updateCoinsDisplay(coins) {
-  const coinsDisplay = document.getElementById('coins-display');
-  if (coinsDisplay) {
-    coinsDisplay.textContent = `Coins Collected: ${coins}`;
+function updateHighScoreDisplay(voyageScore) {
+  const highScoreDisplay = document.getElementById('score-display');
+  if (highScoreDisplay) {
+    highScoreDisplay.textContent = `High Score: ${voyageScore}`;
   }
 }
 
@@ -70,9 +70,9 @@ function initGame(account, manifest) {
   document.getElementById('left-button').onclick = async () => {
     await move(account, manifest, 'Left');
   };
-  document.getElementById('collect-coins-button').onclick = async () => {
-    await collect_coins(account, manifest);
-  };
+  // document.getElementById('collect-coins-button').onclick = async () => {
+  //   await collect_coins(account, manifest);
+  // };
   // document.getElementById('reset-jump-slide-button').onclick = async () => {
   //   await jump_slide_reset(account, manifest);
   // };
@@ -88,7 +88,7 @@ function initGame(account, manifest) {
     document.getElementById('right-button').disabled = false;
     document.getElementById('down-button').disabled = false;
     document.getElementById('left-button').disabled = false;
-    document.getElementById('collect-coins-button').disabled = false;
+    // document.getElementById('collect-coins-button').disabled = false;
     // document.getElementById('reset-jump-slide-button').disabled = false;
     document.getElementById('obstacle-button').disabled = false;
   };
@@ -99,7 +99,7 @@ async function spawn(account, manifest) {
     contractAddress: manifest.contracts.find((contract) => contract.tag === ACTIONS_CONTRACT)
       .address,
     entrypoint: 'spawn',
-    calldata: [],
+    calldata: [new_score],
   });
 
   console.log('Transaction sent:', tx);
@@ -138,19 +138,19 @@ async function move(account, manifest, direction) {
   console.log('Transaction sent:', tx);
 }
 
-async function collect_coins(account, manifest) {
-  let action_addr = manifest.contracts.find(
-    (contract) => contract.tag === ACTIONS_CONTRACT,
-  ).address;
-  const tx = await account.execute([
-    {
-      contractAddress: action_addr,
-      entrypoint: 'collect_coins',
-      calldata: [],
-    },
-  ]);
-  console.log('Transaction sent:', tx);
-}
+// async function collect_coins(account, manifest) {
+//   let action_addr = manifest.contracts.find(
+//     (contract) => contract.tag === ACTIONS_CONTRACT,
+//   ).address;
+//   const tx = await account.execute([
+//     {
+//       contractAddress: action_addr,
+//       entrypoint: 'collect_coins',
+//       calldata: [],
+//     },
+//   ]);
+//   console.log('Transaction sent:', tx);
+// }
 
 // async function jump_slide_reset(account, manifest) {
 //   const tx = await account.execute({
