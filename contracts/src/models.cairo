@@ -1,44 +1,43 @@
 use starknet::ContractAddress;
 use core::num::traits::{SaturatingAdd, SaturatingSub};
 
-#[derive(Serde, Copy, Drop, Default, Introspect)]
+#[derive(Serde, Copy, Drop, Introspect)]
 pub enum Direction {
-    // Serialized as 0.
     #[default]
+    Middle,
     Left,
-    // Serialized as 1.
     Right,
-    // Serialized as 2.
     Up,
-    // Serialized as 3.
     Down,
 }
 
-#[derive(Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde, Introspect)]
 #[dojo::model]
 pub struct Position {
     #[key]
     pub player: ContractAddress,
-    pub x: u32,
-    pub y: u32,
+    pub x: u8, //0 for left lane, 1 for middle lane, 2 for right lane
+    pub z: u8, //0 for down, 1 for ground-level, 2 for up
 }
 
-#[derive(Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde, Introspect)]
 #[dojo::model]
-pub struct Moves {
+pub struct VoyageScore {
     #[key]
     pub player: ContractAddress,
-    pub remaining: u8,
+    pub score: u64,
+    pub high_score: u64,
 }
 
 #[generate_trait]
 pub impl PositionImpl of PositionTrait {
     fn apply_direction(ref self: Position, direction: Direction) {
         match direction {
-            Direction::Left => { self.x = self.x.saturating_sub(1) },
-            Direction::Right => { self.x = self.x.saturating_add(1) },
-            Direction::Up => { self.y = self.y.saturating_add(1) },
-            Direction::Down => { self.y = self.y.saturating_sub(1) },
+            Direction::Left => { if self.x>0 {self.x = self.x.saturating_sub(1)} },
+            Direction::Right => { if self.x<2 {self.x = self.x.saturating_add(1)} },
+            Direction::Up => { self.z = 2 },
+            Direction::Down => { self.z = 0 },
+            Direction::Middle => { self.z = 1 },
         }
     }
 }

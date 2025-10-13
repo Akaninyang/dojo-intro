@@ -7,21 +7,26 @@
   </head>
 
   <body>
-    <h1>Spawn and move</h1>
+    <h1>Stark Hunter</h1>
 
     <button id="controller-button">Connect</button>
 
     <div>
       <div id="position-display" class="display">Position: (0, 0)</div>
-      <div id="moves-display" class="display">Moves remaining: 0</div>
+      <div id="coins-display" class="display">Coins: 0</div>
 
       <button id="spawn-button" disabled>Spawn</button>
-      <button id="move-random-button" disabled>Move random</button>
+      <button id="collect-coins-button" disabled>Coin</button>
+      <!-- <button id="reset-jump-slide-button" disabled>Return to Ground</button> -->
       <div>
         <button id="up-button" disabled>Up</button>
         <button id="down-button" disabled>Down</button>
         <button id="left-button" disabled>Left</button>
         <button id="right-button" disabled>Right</button>
+      </div>
+
+      <div>
+        <button id="obstacle-button" disabled>Obstacle</button>
       </div>
     </div>
 
@@ -35,7 +40,7 @@
       import manifest from '../contracts/manifest_dev.json' assert { type: 'json' };
 
       const DOMAIN_SEPERATOR = {
-        name: 'dojo-intro',
+        name: 'Stark_Hunter',
         version: '1.0',
         chainId: 'KATANA',
         revision: '1',
@@ -55,7 +60,7 @@
         // Subscribe to model updates
         const [_, subscription] = await torii.subscribeEntityQuery({
           query: new ToriiQueryBuilder().withClause(
-            KeysClause(['di-Position', 'di-Moves'], [account.address], 'FixedLen').build(),
+            KeysClause(['Stark_Hunter_Game-Position', 'Stark_Hunter_Game-Coins'], [account.address], 'FixedLen').build(),
           ),
           callback: ({ data, error }) => {
             if (data) {
@@ -97,3 +102,4 @@
     </script>
   </body>
 </html>
+

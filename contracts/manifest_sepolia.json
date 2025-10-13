@@ -2,7 +2,7 @@
   "world": {
     "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
     "address": "0x21b99ae1a15b1f6c4f5e72d2cf7295ab1effa44172321600c6ac4554ce02c88",
-    "seed": "stark_runner",
+    "seed": "stark_explorer",
     "name": "Stark_Hunter",
     "entrypoints": [
       "uuid",
@@ -1479,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x5f005ab9b6e12a427860663a995feb5784a4d7c4d8c132827807e3d08c3bb8a",
-      "class_hash": "0x56790192c63354db55e6c6b1df20dd1864a6153af3ccdaf696c0b922f569ae5",
+      "address": "0x1a48f6397222b6bfb857d21487bc94feb036a0c1fe2499eaf461043b5f0b5d8",
+      "class_hash": "0x5b794b64e1b28c26fcea8e2e11705fa54fa40c8a80fa7aa5801a50fa5e96f4",
       "abi": [
         {
           "type": "impl",
@@ -1736,6 +1736,31 @@
       "selector": "0x7c26b6d78958b75fbfe2eb71b48efc5af4cee217a80b1be0965eb4179933b0d"
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "members": [],
+      "class_hash": "0x37f31ab3e6c722940b0494c26c0e80c89d1de739144c3157793a8731912c8f5",
+      "tag": "Stark_Hunter_Game-CoinsCollected",
+      "selector": "0x33c1e1e22bc90aa219727ed65fb317541493bceb4cdea7e32e65f245f46e8f8"
+    },
+    {
+      "members": [],
+      "class_hash": "0x20c4028fcbcdb76e0894ffba9ace837cdf3acbd42da7bcf6699f9eb5c0984e8",
+      "tag": "Stark_Hunter_Game-LeaderboardUpdated",
+      "selector": "0x1e948798a485bacdd5bf59a1274b0cfda834c7db2fa400e1c57fcbe0b60bb51"
+    },
+    {
+      "members": [],
+      "class_hash": "0x601ba8c36205ee31db6ae3ef2626623f0388ea6d5130df9a936029d343caf5a",
+      "tag": "Stark_Hunter_Game-Moved",
+      "selector": "0x3ed6ff26f043d8ee50de8c31062583dcc517022ebde675bd10227c7967e8930"
+    },
+    {
+      "members": [],
+      "class_hash": "0x28aae9882be1076fcae9561a7c4617b38cec4a30101b44d7c5c6ecc8e8dc329",
+      "tag": "Stark_Hunter_Game-Spawned",
+      "selector": "0x55efcba7e196ba1bd8382a6b3011feafecba45387b7f7b20e72a91406c69319"
+    }
+  ],
   "external_contracts": []
 }

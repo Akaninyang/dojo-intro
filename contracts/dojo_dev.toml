@@ -1,16 +1,19 @@
 [world]
-name = "Dojo intro"
-description = "A simple intro to Dojo."
-seed = "dojo_intro"
+name = "Stark_Hunter"
+description = "An Endless Explorer Game"
+seed = "stark_explorer"
 
 [namespace]
-default = "di"
+default = "Stark_Hunter_Game"
 
 [env]
 rpc_url = "http://localhost:5050/"
 account_address = "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
 private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
-world_address = "0x04fd367663e253d042fef50014873adba41eb40bfd52a3e686c1c37fe6e3dac0"
+world_address = "0x021b99ae1a15b1f6c4f5e72d2cf7295ab1effa44172321600c6ac4554ce02c88"
+
 
 [writers]
-"di" = ["di-actions"]
+"Stark_Hunter_Game" = ["Stark_Hunter_Game-actions"]
+
+

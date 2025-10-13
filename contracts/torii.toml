@@ -1,4 +1,4 @@
-world_address = "0x04fd367663e253d042fef50014873adba41eb40bfd52a3e686c1c37fe6e3dac0"
+world_address = "0x021b99ae1a15b1f6c4f5e72d2cf7295ab1effa44172321600c6ac4554ce02c88"
 
 [server]
 http_cors_origins = ["*"]

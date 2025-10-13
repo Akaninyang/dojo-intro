@@ -1,57 +1,99 @@
-use crate::models::Direction;
 use starknet::ContractAddress;
+use crate::models::Direction;
+use dojo::prelude::*;
 
 #[starknet::interface]
 pub trait IActions<T> {
-    fn spawn(ref self: T);
+    fn spawn(ref self: T, new_score: u64);
     fn move(ref self: T, direction: Direction);
-    fn move_random(ref self: T);
 }
 
-#[starknet::interface]
-trait IVrfProvider<T> {
-    fn request_random(self: @T, caller: ContractAddress, source: Source);
-    fn consume_random(ref self: T, source: Source) -> felt252;
-}
+//Events
+    #[dojo::event]
+    #[derive(Copy, Drop, Serde)]
+    pub struct Spawned {
+        #[key]
+        player: ContractAddress,
+        new_x: u8,
+        new_z: u8,
+        present_score: u64,
+    }
 
-#[derive(Drop, Copy, Clone, Serde)]
-pub enum Source {
-    Nonce: ContractAddress,
-    Salt: felt252,
-}
+    #[dojo::event]
+    #[derive(Copy, Drop, Serde)]
+    pub struct Moved {
+        #[key]
+        player: ContractAddress,
+        new_x: u8,
+        new_z: u8,
+    }
+
+    #[dojo::event]
+    #[derive(Copy, Drop, Serde)]
+    pub struct HighScoreUpdated {
+        #[key]
+        player: ContractAddress,
+        high_score: u64,
+    }
 
 #[dojo::contract]
 pub mod actions {
-    use super::{IActions, IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
-    use crate::models::{Direction, Moves, Position, PositionTrait};
-
-    use core::num::traits::SaturatingSub;
+    use dojo::prelude::*;
+    use super::{IActions, Spawned, Moved, HighScoreUpdated};
+    use crate::models::{Direction, Position, VoyageScore, PositionTrait};
     use dojo::model::ModelStorage;
+    // use core::array::{ArrayTrait, Array};
+    use dojo::event::EventStorage;
 
-    pub const INIT_COORD: u32 = 10;
-    pub const INIT_REMAINING_MOVES: u8 = 100;
-    const VRF_PROVIDER_ADDRESS: felt252 = 0x15f542e25a4ce31481f986888c179b6e57412be340b8095f72f75a328fbb27b;
+    pub const INIT_POSITION: u8 = 1; //start in middle lane, ground level
 
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
-        fn spawn(ref self: ContractState) {
+        fn spawn(ref self: ContractState, new_score: u64) {
             let mut world = self.world_default();
 
             let player = starknet::get_caller_address();
 
             let position = Position {
                 player,
-                x: INIT_COORD,
-                y: INIT_COORD,
-            };
-
-            let moves = Moves {
-                player,
-                remaining: INIT_REMAINING_MOVES,
+                x: INIT_POSITION,
+                z: INIT_POSITION,
             };
 
             world.write_model(@position);
-            world.write_model(@moves);
+
+            let mut voyage_score: VoyageScore = world.read_model(player);
+
+            if voyage_score.score == 0 && voyage_score.high_score == 0 {
+                voyage_score = VoyageScore {
+                    player,
+                    score: 0,
+                    high_score: 0,
+                };
+            }
+
+            voyage_score.score = new_score;
+
+            if voyage_score.score > voyage_score.high_score {
+                    voyage_score.high_score = voyage_score.score;
+
+                    world.emit_event( @HighScoreUpdated { 
+                    player, 
+                    high_score: voyage_score.high_score, 
+                });
+            }
+
+            voyage_score.score = 0;
+
+            world.write_model(@voyage_score);
+
+            //Emit Spawned event
+            world.emit_event( @Spawned { 
+                player, 
+                new_x: position.x, 
+                new_z: position.z, 
+                present_score: voyage_score.score,
+             });
         }
 
         fn move(ref self: ContractState, direction: Direction) {
@@ -61,37 +103,22 @@ pub mod actions {
 
             let mut position: Position = world.read_model(player);
             position.apply_direction(direction);
+
             world.write_model(@position);
 
-            let mut moves: Moves = world.read_model(player);
-            moves.remaining = moves.remaining.saturating_sub(1);
-            world.write_model(@moves);
+            //Emit Moved event
+            world.emit_event( @Moved { 
+                player, 
+                new_x: position.x, 
+                new_z: position.z 
+            });
         }
-
-        fn move_random(ref self: ContractState) {
-            let player = starknet::get_caller_address();
-
-            let vrf_provider = IVrfProviderDispatcher { contract_address: VRF_PROVIDER_ADDRESS.try_into().unwrap() };
-            let random_value: u256 = vrf_provider.consume_random(Source::Nonce(player)).into();
-            let random_dir: felt252 = (random_value % 4).try_into().unwrap();
-
-            let direction = match random_dir {
-                0 => Direction::Up,
-                1 => Direction::Down,
-                2 => Direction::Left,
-                3 => Direction::Right,
-                _ => panic!("Invalid random direction"),
-            };
-
-            self.move(direction);
-        }
-
     }
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn world_default(self: @ContractState) -> dojo::world::WorldStorage {
-            self.world(@"di")
+            self.world(@"Stark_Hunter_Game")
         }
     }
 }

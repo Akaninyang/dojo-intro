@@ -5,11 +5,13 @@
  * Sends transactions to the chain using controller account.
  */
 
-const NAMESPACE = 'di';
-const POSITION_MODEL = 'Position';
-const MOVES_MODEL = 'Moves';
+// import { loadEnv } from "vite";
 
-const ACTIONS_CONTRACT = 'di-actions';
+const NAMESPACE = 'Stark_Hunter_Game';
+const POSITION_MODEL = 'Position';
+const COINS_MODEL = 'Coins';
+
+const ACTIONS_CONTRACT = 'Stark_Hunter_Game-actions';
 
 function updateFromEntitiesData(entities) {
   entities.forEach((entity) => {
@@ -21,46 +23,63 @@ function updateFromEntityData(entity) {
   if (entity.models) {
     if (entity.models[NAMESPACE][POSITION_MODEL]) {
       const position = entity.models[NAMESPACE][POSITION_MODEL];
-      updatePositionDisplay(position.x, position.y);
+      updatePositionDisplay(position.x, position.z);
     }
 
-    if (entity.models[NAMESPACE][MOVES_MODEL]) {
-      const moves = entity.models[NAMESPACE][MOVES_MODEL];
-      updateMovesDisplay(moves.remaining);
+    if (entity.models[NAMESPACE][COINS_MODEL]) {
+      const coins = entity.models[NAMESPACE][COINS_MODEL];
+      updateCoinsDisplay(coins.coin_count);
     }
   }
 }
 
-function updatePositionDisplay(x, y) {
+function updatePositionDisplay(x, z) {
   const positionDisplay = document.getElementById('position-display');
   if (positionDisplay) {
-    positionDisplay.textContent = `Position: (${x}, ${y})`;
+    positionDisplay.textContent = `Lane, Vertical State(${x}, ${z})`;
   }
 }
 
-function updateMovesDisplay(remaining) {
-  const movesDisplay = document.getElementById('moves-display');
-  if (movesDisplay) {
-    movesDisplay.textContent = `Moves remaining: ${remaining}`;
+function updateCoinsDisplay(coins) {
+  const coinsDisplay = document.getElementById('coins-display');
+  if (coinsDisplay) {
+    coinsDisplay.textContent = `Coins Collected: ${coins}`;
   }
 }
+
+// Generates a random integer between min and max (inclusive)
+// function getRandomIntInclusive(min, max) {
+//   min = Math.ceil(min);
+//   max = Math.floor(max);
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+//   }
+// const randomObstacleLane = getRandomIntInclusive(0, 2);
+// const randomObstacleHeight = getRandomIntInclusive(0, 2); // Generates a random lane between 0 and 2 (inclusive)
+
 
 function initGame(account, manifest) {
   document.getElementById('up-button').onclick = async () => {
-    await move(account, manifest, 'up');
+    await move(account, manifest, 'Up');
   };
   document.getElementById('right-button').onclick = async () => {
-    await move(account, manifest, 'right');
+    await move(account, manifest, 'Right');
   };
   document.getElementById('down-button').onclick = async () => {
-    await move(account, manifest, 'down');
+    await move(account, manifest, 'Down');
   };
   document.getElementById('left-button').onclick = async () => {
-    await move(account, manifest, 'left');
+    await move(account, manifest, 'Left');
   };
-  document.getElementById('move-random-button').onclick = async () => {
-    await moveRandom(account, manifest);
+  document.getElementById('collect-coins-button').onclick = async () => {
+    await collect_coins(account, manifest);
   };
+  // document.getElementById('reset-jump-slide-button').onclick = async () => {
+  //   await jump_slide_reset(account, manifest);
+  // };
+  document.getElementById('obstacle-button').onclick = async () => {
+    await spawn(account, manifest);
+  };
+  
 
   document.getElementById('spawn-button').onclick = async () => {
     await spawn(account, manifest);
@@ -69,7 +88,9 @@ function initGame(account, manifest) {
     document.getElementById('right-button').disabled = false;
     document.getElementById('down-button').disabled = false;
     document.getElementById('left-button').disabled = false;
-    document.getElementById('move-random-button').disabled = false;
+    document.getElementById('collect-coins-button').disabled = false;
+    // document.getElementById('reset-jump-slide-button').disabled = false;
+    document.getElementById('obstacle-button').disabled = false;
   };
 }
 
@@ -90,17 +111,20 @@ async function move(account, manifest, direction) {
   // Cairo serialization uses the variant index to determine the direction.
   // Refer to models.cairo in contracts folder.
   switch (direction) {
-    case 'left':
+    case 'Middle':
       calldata = ['0'];
       break;
-    case 'right':
+    case 'Left':
       calldata = ['1'];
       break;
-    case 'up':
+    case 'Right':
       calldata = ['2'];
       break;
-    case 'down':
+    case 'Up':
       calldata = ['3'];
+      break;
+    case 'Down':
+      calldata = ['4'];
       break;
   }
 
@@ -114,29 +138,41 @@ async function move(account, manifest, direction) {
   console.log('Transaction sent:', tx);
 }
 
-const VRF_PROVIDER_ADDRESS = '0x15f542e25a4ce31481f986888c179b6e57412be340b8095f72f75a328fbb27b';
-
-// VRF -> we need to sandwitch the `consume_random` as defined here:
-// https://docs.cartridge.gg/vrf/overview#executing-vrf-transactions
-async function moveRandom(account, manifest) {
+async function collect_coins(account, manifest) {
   let action_addr = manifest.contracts.find(
     (contract) => contract.tag === ACTIONS_CONTRACT,
   ).address;
-
   const tx = await account.execute([
     {
-      contractAddress: VRF_PROVIDER_ADDRESS,
-      entrypoint: 'request_random',
-      calldata: [action_addr, '0', account.address],
-    },
-    {
       contractAddress: action_addr,
-      entrypoint: 'move_random',
+      entrypoint: 'collect_coins',
       calldata: [],
     },
   ]);
-
   console.log('Transaction sent:', tx);
 }
 
+// async function jump_slide_reset(account, manifest) {
+//   const tx = await account.execute({
+//     contractAddress: manifest.contracts.find((contract) => contract.tag === ACTIONS_CONTRACT)
+//       .address,
+//     entrypoint: 'jump_slide_reset',
+//     calldata: [],
+//   });
+
+//   console.log('Transaction sent:', tx);
+// }
+
+// async function collison_checker(account, manifest, lane, height) {
+//   const tx = await account.execute({
+//     contractAddress: manifest.contracts.find((contract) => contract.tag === ACTIONS_CONTRACT)
+//       .address,
+//     entrypoint: 'collison_checker',
+//     calldata: [lane, height],
+//   });
+
+//   console.log('Transaction sent:', tx);
+// }
+
 export { initGame, updateFromEntitiesData };
+

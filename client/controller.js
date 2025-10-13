@@ -4,15 +4,18 @@
  *
  * This example uses Katana for local host development.
  */
+import { provider } from 'starknet';
 import manifest from '../contracts/manifest_dev.json' assert { type: 'json' };
 
-const actionsContract = manifest.contracts.find((contract) => contract.tag === 'di-actions');
-const VRF_PROVIDER_ADDRESS = '0x15f542e25a4ce31481f986888c179b6e57412be340b8095f72f75a328fbb27b';
+const actionsContract = manifest.contracts.find(
+  (contract) => contract.tag === 'Stark_Hunter_Game-actions'
+);
 
 const controllerOpts = {
   chains: [{ rpcUrl: 'http://localhost:5050' }],
   // "KATANA"
   defaultChainId: '0x4b4154414e41',
+
   policies: {
     contracts: {
       [actionsContract.address]: {
@@ -30,14 +33,21 @@ const controllerOpts = {
             description: 'Move the player in the game',
           },
           {
-            name: 'Move Random',
-            entrypoint: 'move_random',
-            description: 'Move the player in the game',
+            name: 'Collect Coins',
+            entrypoint: 'collect_coins',
+            description: 'Collects Coins',
           },
+          // {
+          //   name: 'Collision Checker',
+          //   entrypoint: 'collision_checker',
+          //   description: 'Checks for obstacle collisions',
+          // },
+          // {
+          //   name: 'Jump/Slide Reset',
+          //   entrypoint: 'jump_slide_reset',
+          //   description: 'Reset Jump/Slide state to Ground',
+          // },
         ],
-      },
-      [VRF_PROVIDER_ADDRESS]: {
-        methods: [{ entrypoint: 'request_random' }],
       },
     },
   },
