@@ -1,53 +1,42 @@
-# Dojo intro
+👽 Stark Explorer
 
-This repository contains a (very) simple [Dojo](https://book.dojoengine.org/) game.
-The goal is to showcase how Dojo works and ease the developement for on-chain applications and games.
+Stark Explorer is a fast-paced UFO flying game where players navigate the skies, dodge obstacles, and collect cosmic power-ups — all while their high scores are stored securely on-chain using Dojo on Starknet Sepolia.
 
-The game is built in two parts:
+⸻
 
-- `contracts`: The Dojo contracts deployed on Starknet.
-- `client`: The client application that interacts with the contracts (and read data using Torii).
+🌟 Key Features
+	•	🛸 Fly your UFO through challenging environments
+	•	📈 On-chain high scores — every victory is immutable
+	•	⚡ Built with Vite for a fast and modern web experience
+	•	🌐 Future multiplayer-ready with Relay + WebRTC
 
-## Setup environment
+⸻
 
-To work with Dojo, install the toolchain using `asdf`:
+🚀 Why it rocks
+	•	Playable anywhere, anytime on your browser
+	•	Blockchain integration that makes your scores trustless and verifiable
+	•	Lightweight frontend + powerful on-chain backend — perfect for hackathons
 
-```bash
-curl -L https://raw.githubusercontent.com/dojoengine/dojo/main/dojoup/asdf-install | bash
-```
+⸻
 
-## Deploy contracts
+🛠 Tech Stack
+	•	Dojo — backend world and score management
+	•	Vite — lightning-fast frontend
+	•	Starknet Sepolia — testnet deployment
+	•	Torii — indexing service for live leaderboard
+	•	Optional Relay — real-time multiplayer ready
 
-A simple "spawn and move" game letting you generate a character and move them around a board.
+⸻
 
-To set up your local blockchain environment, change directory to `contracts` and do:
+🎮 Gameplay
+	•	Fly your UFO across a dynamic sky filled with obstacles
+	•	Collect cosmic power-ups to boost your score
+	•	Avoid collisions — one hit ends your flight
+	•	Beat the high score leaderboard and claim the top spot!
 
-```bash
-# (Tab 1) Start the Katana sequencer
-katana --config katana.toml
+⸻
 
-# (Tab 2) Build and deploy the contracts
-sozo build && sozo migrate
-
-# (Tab 3) Start the Torii indexer
-torii --config torii_dev.toml
-```
-
-## Run client
-
-A simple vite project (no React), configured to use `https` (necessary for the [Cartridge controller](https://docs.cartridge.gg/controller/overview)).
-
-Head to the `client` directory and run:
-
-```bash
-# Install dependencies
-pnpm install
-
-# Run the client locally
-pnpm run dev
-```
-
-You should be all set to play the game!
-Navigate to your browser and start clicking away.
-
-Currently, the best browser to test locally with Controller is Google Chrome.
+🔗 Quick Links
+	•	Frontend: 
+	•	World on Sepolia: 0x0263b45e525ae0424de7f8de061972beb5d878c1da7e3b5ee66f8fe00a191bf2
+	•	Torii endpoint: https://api.cartridge.gg/x/starkExplorer/torii)
