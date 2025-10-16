@@ -6,6 +6,7 @@ import { initGame, updateFromEntitiesData, initStarfield } from './game.js';
       import manifest from './manifest_sepolia.json' assert { type: 'json' };
 
     //const manifest = await fetch('./manifest_sepolia.json').then(res => res.json());
+        console.log('Loaded manifest:', manifest);
 
       const DOMAIN_SEPERATOR = {
         name: 'Stark_Explorer',
