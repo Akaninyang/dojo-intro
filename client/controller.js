@@ -1,8 +1,5 @@
 /**
  * Setups controller options:
- * https://docs.cartridge.gg/controller/getting-started
- *
- * This example uses Katana for local host development.
  */
 import { provider } from 'starknet';
 import manifest from '../contracts/manifest_dev.json' assert { type: 'json' };
@@ -12,9 +9,9 @@ const actionsContract = manifest.contracts.find(
 );
 
 const controllerOpts = {
-  chains: [{ rpcUrl: 'http://localhost:5050' }],
-  // "KATANA"
-  defaultChainId: '0x4b4154414e41',
+  chains: [{ rpcUrl: 'https://api.cartridge.gg/x/starknet/sepolia' }],
+  // "sepolia testnet"
+  defaultChainId: '0x534e5f5345504f4c4941',
 
   policies: {
     contracts: {
@@ -32,11 +29,11 @@ const controllerOpts = {
             entrypoint: 'move',
             description: 'Move the player in the game',
           },
-          // {
-          //   name: 'Collect Coins',
-          //   entrypoint: 'collect_coins',
-          //   description: 'Collects Coins',
-          // },
+          {
+            name: 'Collect Coins',
+            entrypoint: 'collect_coins',
+            description: 'Collects Coins',
+          },
           // {
           //   name: 'Collision Checker',
           //   entrypoint: 'collision_checker',

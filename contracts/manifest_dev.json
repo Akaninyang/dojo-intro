@@ -1479,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x71ace9144b9e216630f6793089f88f79959e6b1a6a91f974ea32b6d4dd6a8eb",
-      "class_hash": "0x59ca14d8e9a34267d3ed5f8cefbe44d1591a9aa67c3841c8b678b38fe284049",
+      "address": "0x4389260c4f329b2039c848aba5d1575ad1374c910b85c91561079a5b33db426",
+      "class_hash": "0x33b10c88c52d3f5a12a4909b52b1bbbf194d520936ca751ce711c8c548f70c9",
       "abi": [
         {
           "type": "impl",
@@ -1552,14 +1552,6 @@
             {
               "name": "Right",
               "type": "()"
-            },
-            {
-              "name": "Up",
-              "type": "()"
-            },
-            {
-              "name": "Down",
-              "type": "()"
             }
           ]
         },
@@ -1570,12 +1562,14 @@
             {
               "type": "function",
               "name": "spawn",
-              "inputs": [
-                {
-                  "name": "new_score",
-                  "type": "core::integer::u64"
-                }
-              ],
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "collect_coins",
+              "inputs": [],
               "outputs": [],
               "state_mutability": "external"
             },
@@ -1713,6 +1707,7 @@
       "selector": "0x8292d2b4cd0a7a8580e178289da759e637e3975ba8663b99a6a5e58d88c46d",
       "systems": [
         "spawn",
+        "collect_coins",
         "move",
         "upgrade"
       ]
@@ -1722,18 +1717,24 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x7cb599c385f3204ffa0461790f94ed24931d57b8093f197c44587e6e91d1675",
-      "tag": "Stark_Explorer_Game-Position",
-      "selector": "0x3d0b4bd18102699be437b361c6814ea9c1dbb22e15ffe1c896222a29c45a0c0"
+      "class_hash": "0x46eda04531a2acb3b84d5718ebf6191c242949ef93a20fdba06e0af0340c0ea",
+      "tag": "Stark_Explorer_Game-Coins",
+      "selector": "0x4a434bbe6ada81a4b18f2deb8aee78c7f330b3361318b99311f2f10a532c02e"
     },
     {
       "members": [],
-      "class_hash": "0x441ede5070f739c464392d01f013373752857f55c542926f138499b0ecf5247",
-      "tag": "Stark_Explorer_Game-VoyageScore",
-      "selector": "0x312822bebd0bef1fefbee2e15b0760201a7eaf9ebaf2bfbd95bb0592f667af6"
+      "class_hash": "0x21d01752b36524c80ec5856328323392a2270b6522024af834e01228baad871",
+      "tag": "Stark_Explorer_Game-Position",
+      "selector": "0x3d0b4bd18102699be437b361c6814ea9c1dbb22e15ffe1c896222a29c45a0c0"
     }
   ],
   "events": [
+    {
+      "members": [],
+      "class_hash": "0x3850519a57b31eaf51f1a7ff4f8b9d3630299738cbbe421c8cf91301af175b4",
+      "tag": "Stark_Explorer_Game-CoinsCollected",
+      "selector": "0xed6263311e4ed19caf25575178b74eff0752933e4ee2a7cc3a02fcc887894c"
+    },
     {
       "members": [],
       "class_hash": "0x2c2af25f8ef57748f38ced14fd5bcca1ab865f9e76f32c28894dbe5f3d27d95",
@@ -1742,13 +1743,13 @@
     },
     {
       "members": [],
-      "class_hash": "0x245700612801ce362968a7cf30199d2f6fdd4cea4fa0872597d63dc11758899",
+      "class_hash": "0x7e7b0b700e2e931caa23160471461935ae45927cdc34d4861821d919b4d5831",
       "tag": "Stark_Explorer_Game-Moved",
       "selector": "0x4d2350a80d4772947a07692023dc351fb4111e034572426ca7f9ee105ba3491"
     },
     {
       "members": [],
-      "class_hash": "0x2150f059652bd9271c3bc0d7c7dcb1c760b9aa961fa3588654937f19465d283",
+      "class_hash": "0x1cfb6d928b4bbcd6f958c3446224a1e5ce4da8acb7d91d128b5a05e74d383fb",
       "tag": "Stark_Explorer_Game-Spawned",
       "selector": "0x27fae97e0578e794d6c1a2219943988754509f6878c8e4b12fe3d5b005bfc44"
     }

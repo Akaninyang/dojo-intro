@@ -1,15 +1,15 @@
 [world]
 name = "Stark_Explorer"
 description = "An Endless Explorer Game"
-seed = "stark_explorer_1"
+seed = "stark_explorer_vers1"
 
 [namespace]
 default = "Stark_Explorer_Game"
 
 [env]
 rpc_url = "https://api.cartridge.gg/x/starknet/sepolia"
-world_address = "0x021b99ae1a15b1f6c4f5e72d2cf7295ab1effa44172321600c6ac4554ce02c88"
-world_block = "2528273"
+world_address = "0x0263b45e525ae0424de7f8de061972beb5d878c1da7e3b5ee66f8fe00a191bf2"
+
 
 [writers]
 "Stark_Explorer_Game" = ["Stark_Explorer_Game-actions"]

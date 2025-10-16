@@ -1,6 +1,6 @@
 [world]
 name = "Stark_Explorer"
-description = "An Endless Explorer Game"
+description = "A Space Explorer Game"
 seed = "stark_explorer"
 
 [namespace]

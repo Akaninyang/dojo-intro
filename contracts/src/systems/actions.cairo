@@ -4,7 +4,8 @@ use dojo::prelude::*;
 
 #[starknet::interface]
 pub trait IActions<T> {
-    fn spawn(ref self: T, new_score: u64);
+    fn spawn(ref self: T);
+    fn collect_coins(ref self: T);
     fn move(ref self: T, direction: Direction);
 }
 
@@ -15,7 +16,7 @@ pub trait IActions<T> {
         #[key]
         player: ContractAddress,
         new_x: u8,
-        new_z: u8,
+        //new_z: u8,
         present_score: u64,
     }
 
@@ -25,7 +26,15 @@ pub trait IActions<T> {
         #[key]
         player: ContractAddress,
         new_x: u8,
-        new_z: u8,
+        //new_z: u8,
+    }
+
+    #[dojo::event]
+    #[derive(Copy, Drop, Serde)]
+    pub struct CoinsCollected {
+        #[key]
+        player: ContractAddress,
+        new_score: u64,
     }
 
     #[dojo::event]
@@ -39,8 +48,8 @@ pub trait IActions<T> {
 #[dojo::contract]
 pub mod actions {
     use dojo::prelude::*;
-    use super::{IActions, Spawned, Moved, HighScoreUpdated};
-    use crate::models::{Direction, Position, VoyageScore, PositionTrait};
+    use super::{IActions, Spawned, Moved, CoinsCollected, HighScoreUpdated};
+    use crate::models::{Direction, Position, Coins, PositionTrait};
     use dojo::model::ModelStorage;
     // use core::array::{ArrayTrait, Array};
     use dojo::event::EventStorage;
@@ -49,7 +58,7 @@ pub mod actions {
 
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
-        fn spawn(ref self: ContractState, new_score: u64) {
+        fn spawn(ref self: ContractState) {
             let mut world = self.world_default();
 
             let player = starknet::get_caller_address();
@@ -57,43 +66,65 @@ pub mod actions {
             let position = Position {
                 player,
                 x: INIT_POSITION,
-                z: INIT_POSITION,
+                //z: INIT_POSITION,
             };
 
             world.write_model(@position);
 
-            let mut voyage_score: VoyageScore = world.read_model(player);
+            let mut coins: Coins = world.read_model(player);
 
-            if voyage_score.score == 0 && voyage_score.high_score == 0 {
-                voyage_score = VoyageScore {
+            if coins.score == 0 && coins.high_score == 0 {
+                coins = Coins {
                     player,
                     score: 0,
                     high_score: 0,
                 };
             }
 
-            voyage_score.score = new_score;
-
-            if voyage_score.score > voyage_score.high_score {
-                    voyage_score.high_score = voyage_score.score;
+            if coins.score > coins.high_score {
+                    coins.high_score = coins.score;
 
                     world.emit_event( @HighScoreUpdated { 
                     player, 
-                    high_score: voyage_score.high_score, 
+                    high_score: coins.high_score, 
                 });
             }
 
-            voyage_score.score = 0;
+                coins.score = 0;
+          
 
-            world.write_model(@voyage_score);
+            world.write_model(@coins);
 
             //Emit Spawned event
             world.emit_event( @Spawned { 
                 player, 
                 new_x: position.x, 
-                new_z: position.z, 
-                present_score: voyage_score.score,
+                //new_z: position.z, 
+                present_score: coins.score,
              });
+        }
+
+        fn collect_coins(ref self: ContractState) {
+            let mut world = self.world_default();
+
+            let player = starknet::get_caller_address();
+
+            let mut coins: Coins = world.read_model(player);
+
+            if coins.score == 0 {
+                
+            }
+            if coins.score >= 0 {
+                coins.score += 1;
+            } 
+
+            world.write_model(@coins);
+
+            //Emit Moved event
+            world.emit_event( @CoinsCollected { 
+                player, 
+                new_score: coins.score, 
+            });
         }
 
         fn move(ref self: ContractState, direction: Direction) {
@@ -110,7 +141,7 @@ pub mod actions {
             world.emit_event( @Moved { 
                 player, 
                 new_x: position.x, 
-                new_z: position.z 
+                //new_z: position.z 
             });
         }
     }
