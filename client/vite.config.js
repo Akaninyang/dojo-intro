@@ -29,7 +29,8 @@ export default defineConfig({
   build: {
     // Ensure Node modules are bundled correctly for production
     commonjsOptions: {
-      include: [/node_modules/]
+      include: [/node_modules/],
+      outDir: "docs"
     },
 
     // Rollup options (optional, but ensures no external ESM references remain)
