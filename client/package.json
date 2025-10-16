@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "https://Akaninyang.github.io/dojo-intro",
   "scripts": {
     "dev": "vite dev",
     "format": "prettier --write .",
+    "predeploy": "pnpm-build",
+    "deploy": " gh-pages -d dist",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -18,9 +21,11 @@
     "@dojoengine/core": "1.7.1",
     "@dojoengine/sdk": "^1.7.2",
     "@dojoengine/torii-client": "1.7.2",
+    "controller": "link:../cartridge/controller",
     "starknet": "^8.5.2"
   },
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "prettier": "^3.6.2",
     "vite": "^7.1.4",
     "vite-plugin-mkcert": "^1.17.8",
